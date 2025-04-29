@@ -1,0 +1,54 @@
+.header {
+  display: flex;
+  background-color: white;
+  color: #000;
+  height: 5em;
+  align-items: center;
+}
+
+.header__logo-button {
+  background-color: white;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  padding-left: 0.5em;
+}
+.header__logo-button__icon {
+  width: 5.5em;
+}
+
+.header__title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.7em;
+  padding-top: 0.8em;
+  padding-left: 1em;
+}
+
+.header__title-text {
+  font-weight: 500;
+  font-size: 40px;
+  color: #000;
+}
+
+.header__title-description {
+  font-weight: 300;
+  font-size: 15px;
+  text-align: end;
+  color: #000;
+}
+
+.header__account {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header__account-button {
+  background-color: white;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.header__account-button__icon {
+  width: 3.5em;
+}
