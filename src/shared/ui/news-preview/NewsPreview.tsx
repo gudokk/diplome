@@ -13,16 +13,14 @@ interface NewsItem {
   title: string;
   content: string;
   publication_date: string;
-  author: string;
-  image: string | null;
 }
 
-const News = () => {
+const NewsList = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("back/api/newsPage")
+    fetch("back/api/news")
       .then((res) => res.json())
       .then((data) => {
         setTimeout(() => {
@@ -42,7 +40,7 @@ const News = () => {
         className="mb-5 text-3xl font-extrabold leading-tight text-gray-900"
         to="/news"
       >
-        Лента
+        Все новости
       </Link>
 
       <div className="w-full flex flex-wrap gap-10">
@@ -61,7 +59,7 @@ const News = () => {
           : news.map((item, index) => {
               const color = colors[index % colors.length]; // циклично берем цвет
               return (
-                <div key={index} className="w-full">
+                <div key={index} className="w-full sm:w-[48%]">
                   <div className="relative h-full">
                     <span
                       className={`absolute top-0 left-0 w-full h-full mt-1 ml-1 ${color.bg} rounded-lg`}
@@ -79,17 +77,8 @@ const News = () => {
                       >
                         ----------------------
                       </p>
-                      {item.image && (
-                        <img
-                          src={`http://localhost:8000${item.image}`}
-                          alt={item.title}
-                          className="mb-4 rounded-lg w-full max-h-64 object-cover"
-                        />
-                      )}
                       <p className="mb-2 text-gray-600">{item.content}</p>
-                      {/* <p className="text-sm text-gray-500 mt-2">Автор:</p> */}
-                      <div className="text-left text-sm text-gray-500 mt-4">
-                        {item.author}{" "}
+                      <div className="text-right text-sm text-gray-500 mt-4">
                         {new Date(item.publication_date).toLocaleDateString()}
                       </div>
                     </div>
@@ -102,4 +91,4 @@ const News = () => {
   );
 };
 
-export default News;
+export default NewsList;

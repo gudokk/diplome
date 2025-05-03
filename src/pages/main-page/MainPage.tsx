@@ -1,6 +1,6 @@
 import styles from "./ui/MainPage.module.css";
 import { Header } from "../../widgets/header/Header";
-import NewsList from "../../shared/ui/news/News.tsx";
+import NewsList from "../../shared/ui/news-preview/NewsPreview.tsx";
 
 function MainPage() {
   return (

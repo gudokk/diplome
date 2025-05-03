@@ -1,0 +1,29 @@
+.resorts-page__title {
+  color: #000;
+  font-weight: 500;
+  font-size: 30px;
+  margin-left: 10%;
+  /* margin-top: 2%; */
+}
+
+.wave-divider {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.wave-divider svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 60px;
+}
+
+@media (min-width: 768px) {
+  .wave-divider svg {
+    height: 150px;
+  }
+}
