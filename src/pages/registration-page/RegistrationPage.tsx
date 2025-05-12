@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./ui/RegistrationPage.module.css";
 import { Header } from "../../widgets/header/Header";
+import { Footer } from "../../widgets/footer/Footer";
 
 // Интерфейс для данных формы
 interface FormData {
@@ -121,117 +122,120 @@ const RegistrationPage = () => {
   };
 
   return (
-    <div className={styles["registration-page"]}>
+    <div className="flex flex-col min-h-screen">
       <Header></Header>
-      <div className="items-center bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-auto mt-12 animate-fade-in">
-        <h2 className="text-2xl font-bold text-center text-indigo-800 mb-8">
-          Создать аккаунт
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-indigo-900 font-semibold mb-2"
+      <main className="flex-grow flex items-center justify-center">
+        <div className="items-center bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-auto mt-12 animate-fade-in">
+          <h2 className="text-2xl font-bold text-center text-indigo-800 mb-8">
+            Создать аккаунт
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-indigo-900 font-semibold mb-2"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
+                placeholder="Enter your username"
+                value={formData.username}
+                onChange={handleChange}
+              />
+              {errors.username && (
+                <p className="text-red-500 text-sm mt-2">{errors.username}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-indigo-900 font-semibold mb-2"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-2">{errors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-indigo-900 font-semibold mb-2"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-2">{errors.password}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="confirm-password"
+                className="block text-indigo-900 font-semibold mb-2"
+              >
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirmPassword"
+                className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
+                placeholder="Confirm your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-2">
+                  {errors.confirmPassword}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-indigo-800 text-white py-3 rounded-lg font-semibold hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2 transition-all duration-300 transform hover:scale-[1.02]"
             >
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
-              placeholder="Enter your username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-            {errors.username && (
-              <p className="text-red-500 text-sm mt-2">{errors.username}</p>
-            )}
-          </div>
+              Register
+            </button>
+          </form>
 
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-indigo-900 font-semibold mb-2"
+          <p className="text-center text-gray-600 mt-6">
+            Уже есть аккаунт?{" "}
+            <Link
+              to="/authorization"
+              className="text-indigo-800 font-semibold hover:text-blue-900 transition-colors duration-300"
             >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-2">{errors.email}</p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-indigo-900 font-semibold mb-2"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-2">{errors.password}</p>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="confirm-password"
-              className="block text-indigo-900 font-semibold mb-2"
-            >
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirm-password"
-              name="confirmPassword"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-2">
-                {errors.confirmPassword}
-              </p>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-indigo-800 text-white py-3 rounded-lg font-semibold hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2 transition-all duration-300 transform hover:scale-[1.02]"
-          >
-            Register
-          </button>
-        </form>
-
-        <p className="text-center text-gray-600 mt-6">
-          Уже есть аккаунт?{" "}
-          <Link
-            to="/authorization"
-            className="text-indigo-800 font-semibold hover:text-blue-900 transition-colors duration-300"
-          >
-            Войти
-          </Link>
-        </p>
-      </div>
+              Войти
+            </Link>
+          </p>
+        </div>
+      </main>
+      <Footer></Footer>
     </div>
   );
 };

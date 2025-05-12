@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 const colors = [
   { border: "border-indigo-500", text: "text-indigo-500", bg: "bg-indigo-500" },
@@ -10,9 +11,11 @@ const colors = [
 ];
 
 interface NewsItem {
+  id: number;
   title: string;
   content: string;
   publication_date: string;
+  image: string | null;
 }
 
 const NewsList = () => {
@@ -37,11 +40,12 @@ const NewsList = () => {
   return (
     <div className="container relative flex flex-col justify-between h-full max-w-6xl px-10 mx-auto xl:px-0 mt-5">
       <Link
-        className="mb-5 text-3xl font-extrabold leading-tight text-gray-900"
+        className="mb-5 text-3xl font-extrabold leading-tight text-white"
         to="/news"
       >
         Все новости
       </Link>
+      <div className="h-1 w-full bg-white mb-5" />
 
       <div className="w-full flex flex-wrap gap-10">
         {loading
@@ -69,7 +73,7 @@ const NewsList = () => {
                     >
                       <div className="flex items-center -mt-1">
                         <h3 className="my-2 ml-3 text-lg font-bold text-gray-800">
-                          {item.title}
+                          <Link to={`/news/${item.id}`}>{item.title}</Link>
                         </h3>
                       </div>
                       <p
@@ -77,7 +81,19 @@ const NewsList = () => {
                       >
                         ----------------------
                       </p>
-                      <p className="mb-2 text-gray-600">{item.content}</p>
+                      {item.image && (
+                        <img
+                          src={`http://localhost:8000${item.image}`}
+                          alt={item.title}
+                          className="mb-4 rounded-lg w-full max-h-70 object-cover"
+                        />
+                      )}
+                      <p className="mb-2 text-gray-600">
+                        <ReactMarkdown>
+                          {`${item.content.split(".")[0]}.`}
+                        </ReactMarkdown>
+                      </p>
+
                       <div className="text-right text-sm text-gray-500 mt-4">
                         {new Date(item.publication_date).toLocaleDateString()}
                       </div>

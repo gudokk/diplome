@@ -1,16 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 import { useEffect, useState } from "react";
-import L from "leaflet";
-import iconUrl from "leaflet/dist/images/marker-icon.png";
-import iconShadowUrl from "leaflet/dist/images/marker-shadow.png";
-
-// Установка дефолтной иконки
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl,
-  shadowUrl: iconShadowUrl,
-});
 
 interface Resort {
   id: number;
@@ -19,7 +8,7 @@ interface Resort {
   longitude: number;
 }
 
-const ResortMap = () => {
+const ResortsMap = () => {
   const [resorts, setResorts] = useState<Resort[]>([]);
 
   useEffect(() => {
@@ -29,22 +18,46 @@ const ResortMap = () => {
   }, []);
 
   return (
-    <MapContainer
-      center={[55, 37]}
-      zoom={4}
-      style={{ height: "40em", width: "80%", margin: "0 auto" }}
+    <div
+      id="map-container"
+      style={{
+        width: "1000px",
+        height: "500px",
+        margin: "0 auto",
+      }}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {resorts.map((resort) => (
-        <Marker key={resort.id} position={[resort.latitude, resort.longitude]}>
-          <Popup>{resort.name}</Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+      <YMaps
+        query={{
+          apikey: "df26c33f-b6e4-4442-bc85-0c1c3461ed2a",
+          lang: "ru_RU",
+        }}
+      >
+        <Map
+          defaultState={{ center: [55, 37], zoom: 4 }}
+          style={{ width: "100%", height: "100%" }} // карта на весь контейнер
+        >
+          {resorts.map((resort) => (
+            <Placemark
+              key={resort.id}
+              geometry={[resort.latitude, resort.longitude]}
+              properties={{
+                balloonContent: `
+      <a href="/resorts/${resort.id}" style="color: #1E90FF; text-decoration: underline;">
+        ${resort.name}
+      </a>
+    `,
+                hintContent: resort.name,
+              }}
+              options={{
+                balloonPanelMaxMapArea: 0,
+              }}
+              modules={["geoObject.addon.balloon", "geoObject.addon.hint"]}
+            />
+          ))}
+        </Map>
+      </YMaps>
+    </div>
   );
 };
 
-export default ResortMap;
+export default ResortsMap;

@@ -5,6 +5,8 @@ import AuthorizationPage from "../../pages/authorization-page/AuthorizationPage.
 import ProfilePage from "../../pages/profile-page/ProfilePage.tsx";
 import NewsPage from "../../pages/news-page/NewsPage.tsx";
 import ResortsPage from "../../pages/resorts-page/ResortsPage.tsx";
+import ResortPage from "../../pages/resort-page/ResortPage.tsx";
+import NewPage from "../../pages/new-page/NewPage.tsx";
 import PrivateRoute from "../../components/PrivateRoute";
 export default function App() {
   return (
@@ -14,6 +16,8 @@ export default function App() {
       <Route path="/authorization" element={<AuthorizationPage />} />
       <Route path="/news" element={<NewsPage />} />
       <Route path="/resorts" element={<ResortsPage />} />
+      <Route path="/resorts/:id" element={<ResortPage />} />
+      <Route path="/news/:id" element={<NewPage />} />
       <Route
         path="/profile"
         element={
