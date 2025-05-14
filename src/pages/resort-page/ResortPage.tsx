@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import City from "../../assets/city.svg";
 import NearCity from "../../assets/near_cities.svg";
 import ResortsSlider from "../../shared/ui/resorts-slider/ResortsSlider";
+import ResortFeatures from "../../shared/ui/resort-features/ResortFeatures";
 import ResortCard from "../../shared/ui/resort-card/ResortCard";
 import styles from "./ui/ResortPage.module.css";
 
@@ -12,6 +13,7 @@ const ResortPage = () => {
   const { id } = useParams();
   const [resort, setResort] = useState<any>(null);
   const [images, setImages] = useState<{ id: number; image: string }[]>([]);
+  const [feature, setFeatures] = useState<any>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -25,6 +27,11 @@ const ResortPage = () => {
       .then((res) => res.json())
       .then(setImages)
       .catch((err) => console.error("Ошибка загрузки изображений:", err));
+
+    fetch(`/back/api/resort-features/${id}`)
+      .then((res) => res.json())
+      .then(setFeatures)
+      .catch((err) => console.error("Ошибка загрузки фичей курорта:", err));
   }, [id]);
 
   if (!resort) return <p className="text-center mt-10">Загрузка...</p>;
@@ -73,6 +80,11 @@ const ResortPage = () => {
               <ReactMarkdown>{`${resort.nearby_cities}`}</ReactMarkdown>
             </p>
           </div>
+          <div className="h-1 max-w-4xl mt-10 bg-black mb-10 mx-auto " />
+          <div className="text-black max-w-4xl text-xl sm:text-2xl md:text-3xl mx-auto font-bold mt-6 ">
+            Трассы. Дополнительно
+          </div>
+          <ResortFeatures features={feature} />
         </div>
       </div>
     </div>

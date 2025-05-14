@@ -1,12 +1,14 @@
 import { useState } from "react";
+interface SearchFormProps {
+  onSearch: (term: string) => void;
+}
 
-const SearchForm = () => {
+const SearchForm = ({ onSearch }: SearchFormProps) => {
   const [query, setQuery] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Поиск по:", query);
-    // тут можно вызвать API или обновить фильтр
+    onSearch(query); // 🔵 передаём в родителя
   };
 
   return (
@@ -21,7 +23,7 @@ const SearchForm = () => {
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="inline w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-3 leading-5 placeholder-gray-500 focus:border-blue-700 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+            className="inline w-full rounded-md border border-gray-300 bg-white text-black py-2 pl-3 pr-3 leading-5 placeholder-gray-500 focus:border-blue-700 focus:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
           />
           <button
             type="submit"

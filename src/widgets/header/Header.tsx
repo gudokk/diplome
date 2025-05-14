@@ -4,6 +4,7 @@ import SiteIcon from "../../assets/site-main-icon.png";
 import PersonalAccount from "../../assets/personal-account.png";
 import NewsPage from "../../assets/news-page.png";
 import ResortsPage from "../../assets/resort-page.png";
+import BlogersReviewPage from "../../assets/blogers-page.svg";
 
 export const Header = () => {
   return (
@@ -42,53 +43,22 @@ export const Header = () => {
                   className="flex flex-col items-center text-gray-500 transition hover:text-gray-500/75"
                   to="/resorts"
                 >
-                  <img src={ResortsPage} width="30" height="30" alt="resorts" />
+                  <img src={ResortsPage} width="30" height="30" alt="blogers" />
                   <span>Курорты</span>
                 </Link>
               </li>
-
               <li>
                 <Link
-                  className="text-gray-500 transition hover:text-gray-500/75"
-                  to="/careers"
+                  className="flex flex-col items-center text-gray-500 transition hover:text-gray-500/75"
+                  to="/blogers_reviews"
                 >
-                  Careers
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  className="text-gray-500 transition hover:text-gray-500/75"
-                  to="/history"
-                >
-                  History
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  className="text-gray-500 transition hover:text-gray-500/75"
-                  to="/services"
-                >
-                  Services
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  className="text-gray-500 transition hover:text-gray-500/75"
-                  to="/projects"
-                >
-                  Projects
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  className="text-gray-500 transition hover:text-gray-500/75"
-                  to="/blog"
-                >
-                  Blog
+                  <img
+                    src={BlogersReviewPage}
+                    width="22"
+                    height="22"
+                    alt="BlogersReview"
+                  />
+                  <span>Обзоры блогеров</span>
                 </Link>
               </li>
             </ul>

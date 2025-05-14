@@ -23,6 +23,7 @@ interface NewsItem {
 const News = () => {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("back/api/newsPage")
@@ -48,6 +49,19 @@ const News = () => {
         Лента
       </Link>
       <div className="h-1 w-full bg-white mb-5" />
+      {selectedTag && (
+        <div className="mb-4">
+          <span className="text-sm text-white-700 mr-2">
+            Фильтр: #{selectedTag}
+          </span>
+          <button
+            onClick={() => setSelectedTag(null)}
+            className="text-sm text-bold text-gray-400 underline"
+          >
+            Сбросить фильтр
+          </button>
+        </div>
+      )}
 
       <div className="w-full flex flex-wrap gap-10">
         {loading
@@ -62,59 +76,68 @@ const News = () => {
                 </div>
               </div>
             ))
-          : news.map((item, index) => {
-              const color = colors[index % colors.length];
-              return (
-                <div key={index} className="w-full">
-                  <div className="relative h-full">
-                    <span
-                      className={`absolute top-0 left-0 w-full h-full mt-1 ml-1 ${color.bg} rounded-lg`}
-                    ></span>
-                    <div
-                      className={`relative h-full p-5 bg-white border-2 ${color.border} rounded-lg`}
-                    >
-                      <div className="flex items-center -mt-1">
-                        <h3 className="my-2 ml-3 text-lg font-bold text-gray-800">
-                          <Link to={`/news/${item.id}`}>{item.title}</Link>
-                        </h3>
-                      </div>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {item.tags?.map((tag, i) => (
-                          <span
-                            key={i}
-                            className="text-xs bg-gray-200 text-gray-800 px-2 py-1 rounded-full"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
-                      </div>
-                      <p
-                        className={`mt-3 mb-1 text-xs font-medium ${color.text} uppercase`}
+          : news
+              .filter((item) =>
+                selectedTag ? item.tags.includes(selectedTag) : true
+              )
+              .map((item, index) => {
+                const color = colors[index % colors.length];
+                return (
+                  <div key={index} className="w-full">
+                    <div className="relative h-full">
+                      <span
+                        className={`absolute top-0 left-0 w-full h-full mt-1 ml-1 ${color.bg} rounded-lg`}
+                      ></span>
+                      <div
+                        className={`relative h-full p-5 bg-white border-2 ${color.border} rounded-lg`}
                       >
-                        ----------------------
-                      </p>
-                      {item.image && (
-                        <img
-                          src={`http://localhost:8000${item.image}`}
-                          alt={item.title}
-                          className="max-w-2xl mb-4 rounded-lg w-full max-h-70 object-cover mx-auto"
-                        />
-                      )}
-                      <p className="mb-2 text-gray-600">
-                        <ReactMarkdown>
-                          {`${item.content.split(".")[0]}.`}
-                        </ReactMarkdown>
-                      </p>
+                        <div className="flex items-center -mt-1">
+                          <h3 className="my-2 ml-3 text-lg font-bold text-gray-800">
+                            <Link to={`/news/${item.id}`}>{item.title}</Link>
+                          </h3>
+                        </div>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {item.tags?.map((tag, i) => (
+                            <button
+                              key={i}
+                              onClick={() => setSelectedTag(tag)}
+                              className={`text-xs px-2 py-1 rounded-full ${
+                                selectedTag === tag
+                                  ? "bg-blue-700 text-white"
+                                  : "bg-gray-200 text-gray-800"
+                              }`}
+                            >
+                              #{tag}
+                            </button>
+                          ))}
+                        </div>
+                        <p
+                          className={`mt-3 mb-1 text-xs font-medium ${color.text} uppercase`}
+                        >
+                          ----------------------
+                        </p>
+                        {item.image && (
+                          <img
+                            src={`http://localhost:8000${item.image}`}
+                            alt={item.title}
+                            className="max-w-2xl mb-4 rounded-lg w-full max-h-70 object-cover mx-auto"
+                          />
+                        )}
+                        <p className="mb-2 text-gray-600">
+                          <ReactMarkdown>
+                            {`${item.content.split(".")[0]}.`}
+                          </ReactMarkdown>
+                        </p>
 
-                      <div className="text-left text-sm text-gray-500 mt-4">
-                        {item.author}{" "}
-                        {new Date(item.publication_date).toLocaleDateString()}
+                        <div className="text-left text-sm text-gray-500 mt-4">
+                          {item.author}{" "}
+                          {new Date(item.publication_date).toLocaleDateString()}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
       </div>
     </div>
   );

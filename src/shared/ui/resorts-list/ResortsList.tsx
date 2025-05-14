@@ -17,7 +17,11 @@ interface Resort {
 type SortKey = keyof Resort;
 type SortOrder = "asc" | "desc";
 
-const ResortsTable = () => {
+interface ResortsTableProps {
+  searchQuery: string;
+}
+
+const ResortsTable = ({ searchQuery }: ResortsTableProps) => {
   const [resorts, setResorts] = useState<Resort[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
@@ -38,7 +42,11 @@ const ResortsTable = () => {
     }
   };
 
-  const sortedResorts = [...resorts].sort((a, b) => {
+  const filteredResorts = resorts.filter((resort) =>
+    resort.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const sortedResorts = [...filteredResorts].sort((a, b) => {
     const valA = a[sortKey];
     const valB = b[sortKey];
     if (typeof valA === "number" && typeof valB === "number") {
@@ -75,21 +83,31 @@ const ResortsTable = () => {
           </tr>
         </thead>
         <tbody>
-          {sortedResorts.map((resort, idx) => (
-            <tr key={idx} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-              <td className="px-4 py-2 font-medium text-blue-700 underline">
-                <Link to={`/resorts/${resort.id}`}>{resort.name}</Link>
-              </td>
-              <td className="px-4 py-2 text-black">{resort.total_km}</td>
-              <td className="px-4 py-2 text-black">{resort.min_height}</td>
-              <td className="px-4 py-2 text-black">{resort.max_height}</td>
-              <td className="px-4 py-2 text-black">{resort.green}</td>
-              <td className="px-4 py-2 text-black">{resort.blue}</td>
-              <td className="px-4 py-2 text-black">{resort.red}</td>
-              <td className="px-4 py-2 text-black">{resort.black}</td>
-              <td className="px-4 py-2 text-black">{resort.lifts}</td>
-            </tr>
-          ))}
+          {sortedResorts.map((resort, idx) => {
+            const isMatch = resort.name
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+            return (
+              <tr
+                key={idx}
+                className={`${
+                  idx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                } border border-gray-200 ${isMatch ? " border-gray-300" : ""}`}
+              >
+                <td className="px-4 py-2 font-medium text-blue-700 underline">
+                  <Link to={`/resorts/${resort.id}`}>{resort.name}</Link>
+                </td>
+                <td className="px-4 py-2 text-black">{resort.total_km}</td>
+                <td className="px-4 py-2 text-black">{resort.min_height}</td>
+                <td className="px-4 py-2 text-black">{resort.max_height}</td>
+                <td className="px-4 py-2 text-black">{resort.green}</td>
+                <td className="px-4 py-2 text-black">{resort.blue}</td>
+                <td className="px-4 py-2 text-black">{resort.red}</td>
+                <td className="px-4 py-2 text-black">{resort.black}</td>
+                <td className="px-4 py-2 text-black">{resort.lifts}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
