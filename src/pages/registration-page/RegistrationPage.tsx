@@ -62,7 +62,12 @@ const RegistrationPage = () => {
     if (!formData.username) newErrors.username = "Username is required.";
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Please enter a valid email.";
-    if (!formData.password) newErrors.password = "Password is required.";
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Пароль должен содержать минимум 8 символов.";
+    }
+
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Пароли не совпадают.";
 
@@ -99,21 +104,33 @@ const RegistrationPage = () => {
           password: "",
           confirmPassword: "",
         });
-      } else {
+      }
+      if (!response.ok) {
         const errorData = await response.json();
         console.error("Ошибка регистрации:", errorData.detail);
 
-        // Если ошибка связана с username, то показываем её в поле username
         if (errorData.detail === "Username already exists.") {
           setErrors((prevErrors) => ({
             ...prevErrors,
             username: "Это имя пользователя уже занято.",
           }));
+        } else if (errorData.detail === "Email already registered.") {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "Аккаунт с такой почтой уже существует.",
+          }));
         } else {
-          const errorData = await response.json();
-          console.error("Ошибка регистрации:", errorData.message);
-          alert("Ошибка регистрации: " + errorData.message);
+          // Удали или закомментируй alert:
+          // alert("Ошибка регистрации: " + errorData.detail);
+
+          // Вместо этого можно также вывести общее сообщение (опционально):
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            username: errorData.detail || "Ошибка регистрации",
+          }));
         }
+
+        return;
       }
     } catch (error) {
       console.error("Ошибка при отправке запроса:", error);

@@ -14,10 +14,11 @@ if (rootElement) {
         <div
           style={{
             backgroundImage: `url(${Background})`,
-            backgroundSize: "cover", // Заполняет весь контейнер
-            backgroundRepeat: "no-repeat", // Не повторяет картинку
-            backgroundPosition: "center", // Центрирует изображение
-            minHeight: "100vh", // Обеспечивает высоту во весь экран
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            minHeight: "100%",
           }}
         >
           <App />

@@ -122,7 +122,7 @@ const ResortsQuickSearch = () => {
             Найти курорт
           </button>
           <button
-            onClick={() => navigate("/resorts")}
+            onClick={() => navigate("/resorts/selector")}
             className="border border-blue-500 text-blue-500 px-4 py-2 rounded"
           >
             Расширенный поиск

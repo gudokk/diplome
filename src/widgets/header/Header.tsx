@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./Header.module.css";
 import SiteIcon from "../../assets/site-main-icon.png";
-import PersonalAccount from "../../assets/personal-account.png";
 import NewsPage from "../../assets/news-page.png";
 import ResortsPage from "../../assets/resort-page.png";
 import BlogersReviewPage from "../../assets/blogers-page.svg";
@@ -67,15 +66,24 @@ export const Header = () => {
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
               <Link
-                className="block rounded-md px-4 py-1.5 sm:px-5 sm:py-2.5 text-sm font-medium text-white"
+                className="flex flex-col items-center text-gray-500 transition hover:text-gray-500/75"
                 to="/profile"
               >
-                <img
-                  src={PersonalAccount}
-                  width="40"
-                  height="40"
-                  alt="account"
-                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1"
+                  stroke="currentColor"
+                  className="size-10 text-black"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                  />
+                </svg>
+                {/* <span>Личный кабинет</span> */}
               </Link>
             </div>
 
