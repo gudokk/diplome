@@ -1,5 +1,4 @@
 import { useParams, Link } from "react-router-dom";
-import styles from "./ui/HotelsPage.module.css";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 import HotelsCards from "../../shared/ui/hotels-cards/HotelsCards";

@@ -1,132 +1,114 @@
-import { useNavigate } from "react-router-dom";
-import styles from "./ui/ProfilePage.module.css";
+// ProfilePage.tsx
+import { useEffect, useState } from "react";
+import {Link, useNavigate} from "react-router-dom";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
-import AccountPhoto from "../../assets/account-photo.jpg";
+import defaultPhoto from "../../assets/account-photo.jpg";
+
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  registration_date: string;
+  description: string;
+  gender: string;
+  photo: string | null;
+  is_admin: boolean;
+}
 
 const ProfilePage = () => {
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    fetch("/back/api/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+        .then((res) => {
+          if (!res.ok) throw new Error("Unauthorized");
+          return res.json();
+        })
+        .then((data) => setUser(data))
+        .catch(() => {
+          localStorage.removeItem("token");
+          navigate("/authorization");
+        });
+  }, [navigate]);
+
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Удаляем токен из localStorage
-    navigate("/authorization"); // Перенаправляем на страницу логина
+    localStorage.removeItem("token");
+    navigate("/authorization");
   };
 
   const handleEditProfile = () => {
-    alert("Редактирование профиля пока не реализовано."); // Пока просто сообщение
+    navigate("/profile/edit");
   };
+
+
+  if (!user) return null;
+
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-grow flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-auto w-full p-8 transition-all duration-300 animate-fade-in">
-          <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/3 text-center mb-8 md:mb-0">
-              <img
-                src={AccountPhoto}
-                alt="Profile Picture"
-                className="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-blue-800 transition-transform duration-300 hover:scale-105"
-              />
-              <h1 className="text-2xl font-bold text-blue-800  mb-2">
-                John Doe
-              </h1>
-              <p className="text-gray-600 dark:text-gray-300">
-                Software Developer
-              </p>
-              {/* Кнопки */}
-              <div className="flex flex-col gap-4 mt-6">
-                <button
-                  onClick={handleEditProfile}
-                  className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition-colors duration-300"
-                >
-                  Редактировать профиль
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-300"
-                >
-                  Выйти
-                </button>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-grow flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-auto p-8 transition-all duration-300 animate-fade-in">
+            <div className="flex flex-col md:flex-row">
+              <div className="md:w-1/3 text-center mb-8 md:mb-0">
+                <img
+                    src={user.photo ? `http://localhost:8000${user.photo}` : defaultPhoto}
+                    alt="Profile Picture"
+                    className="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-blue-800 transition-transform duration-300 hover:scale-105"
+                />
+                <h1 className="text-2xl font-bold text-blue-800 mb-2">
+                  {user.username}
+                </h1>
+                <p className="text-gray-600">
+                  {user.description || "Нет описания"}
+                </p>
+                <div className="flex flex-col gap-4 mt-6">
+                  <button
+                      onClick={handleEditProfile}
+                      className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition-colors duration-300"
+                  >
+                    Редактировать профиль
+                  </button>
+                  <button
+                      onClick={handleLogout}
+                      className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-300"
+                  >
+                    Выйти
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="md:w-2/3 md:pl-8">
-              <h2 className="text-xl font-semibold text-indigo-800 dark:text-white mb-4">
-                About Me
-              </h2>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
-                Passionate software developer with 5 years of experience in web
-                technologies. I love creating user-friendly applications and
-                solving complex problems.
-              </p>
-              <h2 className="text-xl font-semibold text-indigo-800 dark:text-white mb-4">
-                Skills
-              </h2>
-              <div className="flex flex-wrap gap-2 mb-6">
-                <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
-                  JavaScript
-                </span>
-                <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
-                  React
-                </span>
-                <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
-                  Node.js
-                </span>
-                <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
-                  Python
-                </span>
-                <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
-                  SQL
-                </span>
+              <div className="md:w-2/3 md:pl-8">
+                <h2 className="text-xl font-semibold text-indigo-800 mb-4">Информация</h2>
+                <ul className="space-y-2 text-gray-700">
+                  <li><strong>Email:</strong> {user.email}</li>
+                  <li><strong>Дата регистрации:</strong> {user.registration_date}</li>
+                  <li><strong>Пол:</strong> {user.gender || "Не указан"}</li>
+                  <li><strong>Роль:</strong> {user.is_admin ? "Администратор" : "Пользователь"}</li>
+                </ul>
+                <Link to="/ski-game" className="flex flex-col items-center text-gray-500 hover:text-gray-500/75">
+                  <span>Статьи</span>
+                </Link>
+                <Link
+                    to="/articles/create"
+                    className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-800"
+                >
+                  ✍ Создать новость
+                </Link>
+
               </div>
-              <h2 className="text-xl font-semibold text-indigo-800 dark:text-white mb-4">
-                Contact Information
-              </h2>
-              <ul className="space-y-2 text-gray-700 dark:text-gray-300">
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2 text-indigo-800 dark:text-blue-900"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                  john.doe@example.com
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2 text-indigo-800 dark:text-blue-900"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                  </svg>
-                  +1 (555) 123-4567
-                </li>
-                <li className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-2 text-indigo-800 dark:text-blue-900"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  San Francisco, CA
-                </li>
-              </ul>
             </div>
           </div>
-        </div>
-      </main>
-      <Footer></Footer>
-    </div>
+        </main>
+        <Footer />
+      </div>
   );
 };
 

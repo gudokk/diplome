@@ -52,12 +52,16 @@ const StarRating = ({ rating }: { rating: number }) => {
 
 const ReviewsList = () => {
   const [expandedReviewId, setExpandedReviewId] = useState<number | null>(null);
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { id } = useParams();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [average, setAverage] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
+    // Проверка токена
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token); // true если токен есть
+
     if (!id) return;
 
     fetch(`/back/api/resorts/${id}/reviews`)
@@ -109,12 +113,14 @@ const ReviewsList = () => {
               Общий рейтинг
             </h2>
             <div className="flex justify-right gap-4">
+              {isAuthenticated && (
               <Link
                 to={`/resorts/${id}/review-form`}
                 className="text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-600 hover:text-white transition"
               >
                 Написать отзыв
               </Link>
+              )}
               {id && (
                 <Link
                   to={`/resorts/${id}`}

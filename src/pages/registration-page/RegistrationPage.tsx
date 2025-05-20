@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "./ui/RegistrationPage.module.css";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 

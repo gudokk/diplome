@@ -103,6 +103,7 @@ const NewsList = () => {
               );
             })}
       </div>
+        <div className="h-1 w-full bg-white mb-10 mt-10" />
     </div>
   );
 };

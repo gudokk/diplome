@@ -50,13 +50,13 @@ const News = () => {
       </Link>
       <div className="h-1 w-full bg-white mb-5" />
       {selectedTag && (
-        <div className="mb-4">
-          <span className="text-sm text-white-700 mr-2">
+        <div className="mb-4 bg-white">
+          <span className="text-sm text-gray-900 mr-2">
             Фильтр: #{selectedTag}
           </span>
           <button
             onClick={() => setSelectedTag(null)}
-            className="text-sm text-bold text-gray-400 underline"
+            className="text-sm text-bold text-gray-900 underline"
           >
             Сбросить фильтр
           </button>

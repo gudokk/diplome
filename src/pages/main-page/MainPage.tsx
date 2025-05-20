@@ -11,7 +11,7 @@ function MainPage() {
         <Header></Header>
       </div>
       <NewsList></NewsList>
-      <div className="h-1 max-w-6xl bg-white mb-10 mt-10 mx-auto " />
+      {/*<div className="h-1 max-w-6xl bg-white mb-10 mt-10 mx-auto " />*/}
       <ResortsQuickSearch></ResortsQuickSearch>
       <Footer></Footer>
     </div>

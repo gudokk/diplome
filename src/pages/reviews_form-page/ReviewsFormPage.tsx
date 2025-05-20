@@ -60,17 +60,19 @@ const ReviewForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const token = localStorage.getItem("token");
-    if (!token) return alert("Требуется авторизация");
 
     const response = await fetch(`/back/api/resorts/${id}/submit-review`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`, // важно
       },
       body: JSON.stringify(form),
     });
+
+
 
     if (response.ok) {
       alert("Отзыв успешно отправлен");
@@ -139,36 +141,38 @@ const ReviewForm = () => {
             </div>
 
             {[
-              ["Катание", "skiing"],
-              ["Подъёмники", "lifts"],
-              ["Цены", "prices"],
-              ["Снег и погода", "snow_weather"],
-              ["Жилье", "accommodation"],
-              ["Публика", "people"],
-              ["Досуг", "apres_ski"],
-            ].map(([label, key]) => (
-              <div key={key}>
-                <label className="font-semibold ">{label}</label>
-                <textarea
-                  name={`comment_${key}`}
-                  value={(form as any)[`comment_${key}`]}
-                  onChange={handleChange}
-                  className="border p-2 rounded w-full bg-white text-black border-blue-400"
-                ></textarea>
-                <select
-                  name={`rating_${key}`}
-                  value={(form as any)[`rating_${key}`]}
-                  onChange={handleChange}
-                  className="border p-2 rounded mt-1 bg-white text-black border-blue-400"
-                >
-                  {[1, 2, 3, 4, 5].map((r) => (
-                    <option key={r} value={r}>
-                      {r}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              { label: "Катание", key: "skiing", hint: "Расскажите о трассах, их сложности и длине" },
+              { label: "Подъёмники", key: "lifts", hint: "Комфорт и количество подъёмников" },
+              { label: "Цены", key: "prices", hint: "Соотношение цены и качества" },
+              { label: "Снег и погода", key: "snow_weather", hint: "Качество снега и погодные условия" },
+              { label: "Жилье", key: "accommodation", hint: "Уровень проживания и доступность" },
+              { label: "Публика", key: "people", hint: "Аудитория отдыхающих, атмосфера" },
+              { label: "Досуг", key: "apres_ski", hint: "Развлечения после катания" },
+            ].map(({ label, key, hint }) => (
+                <div key={key}>
+                  <label className="font-semibold text-black">{label}</label>
+                  <p className="text-sm text-gray-600 mb-1">{hint}</p>
+                  <textarea
+                      name={`comment_${key}`}
+                      value={(form as any)[`comment_${key}`]}
+                      onChange={handleChange}
+                      className="border p-2 rounded w-full bg-white text-black border-blue-400"
+                  ></textarea>
+                  <select
+                      name={`rating_${key}`}
+                      value={(form as any)[`rating_${key}`]}
+                      onChange={handleChange}
+                      className="border p-2 rounded mt-1 bg-white text-black border-blue-400"
+                  >
+                    {[1, 2, 3, 4, 5].map((r) => (
+                        <option key={r} value={r}>
+                          {r}
+                        </option>
+                    ))}
+                  </select>
+                </div>
             ))}
+
 
             <button
               type="submit"
