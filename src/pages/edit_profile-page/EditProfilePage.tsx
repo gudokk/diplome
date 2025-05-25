@@ -63,8 +63,9 @@ const EditProfilePage = () => {
         <div className="flex flex-col min-h-screen">
             <Header/>
             <main className="flex-grow flex items-center justify-center">
+                <div className="px-4 sm:px-0 w-full">
                 <div
-                    className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-auto p-8 transition-all duration-300 animate-fade-in">
+                    className="bg-white mt-5 rounded-xl shadow-2xl max-w-4xl w-full mx-auto p-8 transition-all duration-300 animate-fade-in">
 
                     <h2 className="text-2xl font-bold text-black mb-6">Редактирование профиля</h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -88,6 +89,7 @@ const EditProfilePage = () => {
                         <input type="file" onChange={handleFileChange} className="w-full"/>
                         <button type="submit" className="bg-blue-700 text-white px-4 py-2 rounded">Сохранить</button>
                     </form>
+                </div>
                 </div>
             </main>
             <Footer></Footer>

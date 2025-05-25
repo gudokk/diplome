@@ -1,5 +1,4 @@
-// Новый ResortCard + ResortSelector с макетом как на скриншоте и отображением трасс по цветам
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
 interface Resort {
@@ -25,7 +24,7 @@ interface ResortImage {
     image: string;
 }
 
-const Stars = ({ rating }: { rating: number }) => {
+const Stars = ({rating}: { rating: number }) => {
     const filled = Math.round(rating);
     return (
         <div className="flex items-center gap-1">
@@ -37,7 +36,7 @@ const Stars = ({ rating }: { rating: number }) => {
     );
 };
 
-const ResortCard = ({ resort, image }: { resort: Resort; image: string | null }) => (
+const ResortCard = ({resort, image}: { resort: Resort; image: string | null }) => (
     <div className="bg-white rounded-xl shadow p-4 flex gap-4 max-w-5xl w-full">
         {image ? (
             <img
@@ -46,11 +45,12 @@ const ResortCard = ({ resort, image }: { resort: Resort; image: string | null })
                 className="w-48 h-32 object-cover rounded-md"
             />
         ) : (
-            <div className="w-48 h-32 bg-gray-300 rounded-md" />
+            <div className="w-48 h-32 bg-gray-300 rounded-md"/>
         )}
         <div className="flex-1 flex flex-col justify-between">
             <div>
-                <h2 className="text-xl font-bold text-black"><Link to={`/resorts/${resort.id}`}>{resort.name}</Link></h2>
+                <h2 className="text-xl font-bold text-black"><Link to={`/resorts/${resort.id}`}>{resort.name}</Link>
+                </h2>
                 <p className="text-sm text-gray-500 mb-2">{resort.country}</p>
                 <div className="text-sm text-gray-700 mb-1">
                     <span className="font-medium">Высота:</span> {resort.min_height} - {resort.max_height} м
@@ -66,18 +66,20 @@ const ResortCard = ({ resort, image }: { resort: Resort; image: string | null })
                     <span className="font-medium">Подъёмники:</span> {resort.lifts}
                 </div>
                 <div className="text-sm text-gray-700">
-                    <span className="font-medium">Скипасс:</span> {resort.price_day ? `${resort.price_day} ₽ в день` : "нет данных"}
+                    <span
+                        className="font-medium">Скипасс:</span> {resort.price_day ? `${resort.price_day} ₽ в день` : "нет данных"}
                 </div>
             </div>
             <div className="flex justify-between items-end mt-2">
                 <div className="flex items-center gap-2">
-                    <Stars rating={resort.average_rating} />
+                    <Stars rating={resort.average_rating}/>
                     <span className="text-sm text-gray-500">({resort.num_reviews})</span>
                 </div>
                 {resort.latest_review && (
                     <p className="text-sm text-gray-600 max-w-[300px] truncate">
-                        <Link to={`/resorts/${resort.id}/reviews`} className="font-medium ">{resort.latest_review}</Link>
-                        </p>
+                        <Link to={`/resorts/${resort.id}/reviews`}
+                              className="font-medium ">{resort.latest_review}</Link>
+                    </p>
                 )}
             </div>
         </div>
@@ -108,7 +110,7 @@ const ResortsSelector = () => {
                         .then((res) => res.json())
                         .then((imgs: ResortImage[]) => {
                             if (imgs.length > 0) {
-                                setImages((prev) => ({ ...prev, [resort.id]: imgs[0].image }));
+                                setImages((prev) => ({...prev, [resort.id]: imgs[0].image}));
                             }
                         });
                 });
@@ -154,16 +156,16 @@ const ResortsSelector = () => {
     });
 
     const sortButtons = [
-        { key: "popular", label: "По популярности" },
-        { key: "rating", label: "По рейтингу" },
-        { key: "price", label: "По цене на скипасс" },
-        { key: "trail", label: "По км. трасс" },
-        { key: "height", label: "По высоте" },
-        { key: "green", label: "По зелёным трассам" },
-        { key: "blue", label: "По синим трассам" },
-        { key: "red", label: "По красным трассам" },
-        { key: "black", label: "По чёрным трассам" },
-        { key: "name", label: "По названию" },
+        {key: "popular", label: "По популярности"},
+        {key: "rating", label: "По рейтингу"},
+        {key: "price", label: "По цене на скипасс"},
+        {key: "trail", label: "По км. трасс"},
+        {key: "height", label: "По высоте"},
+        {key: "green", label: "По зелёным трассам"},
+        {key: "blue", label: "По синим трассам"},
+        {key: "red", label: "По красным трассам"},
+        {key: "black", label: "По чёрным трассам"},
+        {key: "name", label: "По названию"},
     ];
 
     return (
@@ -174,7 +176,7 @@ const ResortsSelector = () => {
 
             {/* Блок сортировки */}
             <div className="flex flex-wrap gap-2 px-10 pb-6">
-                {sortButtons.map(({ key, label }) => (
+                {sortButtons.map(({key, label}) => (
                     <button
                         key={key}
                         onClick={() => handleSort(key)}
@@ -198,7 +200,7 @@ const ResortsSelector = () => {
                         type="checkbox"
                         checked={weatherFilters.snow_last_3_days}
                         onChange={(e) =>
-                            setWeatherFilters({ ...weatherFilters, snow_last_3_days: e.target.checked })
+                            setWeatherFilters({...weatherFilters, snow_last_3_days: e.target.checked})
                         }
                     />{" "}
                     Снег за последние 3 дня
@@ -208,7 +210,7 @@ const ResortsSelector = () => {
                         type="checkbox"
                         checked={weatherFilters.snow_expected}
                         onChange={(e) =>
-                            setWeatherFilters({ ...weatherFilters, snow_expected: e.target.checked })
+                            setWeatherFilters({...weatherFilters, snow_expected: e.target.checked})
                         }
                     />{" "}
                     Снег ожидается в ближайшее время
@@ -217,10 +219,17 @@ const ResortsSelector = () => {
 
 
             <div className="max-w-6xl mx-auto grid gap-6 py-6 pt-0">
-                {sortedResorts.map((resort) => (
-                    <ResortCard key={resort.id} resort={resort} image={images[resort.id] || null} />
-                ))}
+                {sortedResorts.length > 0 ? (
+                    sortedResorts.map((resort) => (
+                        <ResortCard key={resort.id} resort={resort} image={images[resort.id] || null}/>
+                    ))
+                ) : (
+                    <p className="text-center text-gray-600 text-lg">
+                        Курорты с заданными критериями не найдены
+                    </p>
+                )}
             </div>
+
         </div>
     );
 };

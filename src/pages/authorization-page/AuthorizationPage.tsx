@@ -88,10 +88,14 @@ const AuthorizationPage = () => {
                 const errorData = await response.json();
                 setErrors((prev) => ({...prev, form: errorData.detail}));
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("Ошибка авторизации:", error);
-            setErrors((prev) => ({...prev, form: "Ошибка соединения с сервером."}));
+            setErrors((prev) => ({
+                ...prev,
+                form: "Неверный логин или пароль.",
+            }));
         }
+
     };
 
 
@@ -99,8 +103,8 @@ const AuthorizationPage = () => {
         <div className="flex flex-col min-h-screen">
             <Header/>
             <main className="flex-grow flex items-center justify-center">
-                <div
-                    className="items-center bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-auto mt-12 animate-fade-in">
+                <div className="px-4 sm:px-0 w-full">
+                    <div className="items-center bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-auto mt-12 animate-fade-in">
                     <h2 className="text-2xl font-bold text-center text-indigo-800 mb-8">
                         Войти в аккаунт
                     </h2>
@@ -113,7 +117,7 @@ const AuthorizationPage = () => {
                                 htmlFor="username"
                                 className="block text-indigo-900 font-semibold mb-2"
                             >
-                                Username
+                                Логин
                             </label>
                             <input
                                 type="text"
@@ -134,7 +138,7 @@ const AuthorizationPage = () => {
                                 htmlFor="password"
                                 className="block text-indigo-900 font-semibold mb-2"
                             >
-                                Password
+                                Пароль
                             </label>
                             <input
                                 type="password"
@@ -167,6 +171,7 @@ const AuthorizationPage = () => {
                             Зарегистрироваться
                         </Link>
                     </p>
+                    </div>
                 </div>
             </main>
             <Footer></Footer>

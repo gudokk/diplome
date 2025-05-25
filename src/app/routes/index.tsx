@@ -14,6 +14,8 @@ import BlogersReviewPage from "../../pages/blogers_review-page/BlogersReviewPage
 import EditProfilePage from "../../pages/edit_profile-page/EditProfilePage.tsx";
 import NewPage from "../../pages/new-page/NewPage.tsx";
 import SkiGame from "../../pages/ski-game/SkiGame.tsx";
+import ArticleCreatePage from "../../pages/article_create-page/ArticleCreatePage.tsx";
+import AdminArticlesPage from "../../pages/admin_articles-page/AdminArticlesPage.tsx";
 import AdminPage from "../../pages/admin-page/AdminPage.tsx";
 import UsersPage from "../../pages/users-page/UsersPage.tsx";
 import PrivateRoute from "../../components/PrivateRoute";
@@ -34,6 +36,8 @@ export default function App() {
             <Route path="/blogers_reviews" element={<BlogersReviewPage/>}/>
             <Route path="/profile/edit" element={<EditProfilePage/>}/>
             <Route path="/admin" element={<AdminPage/>}/>
+            <Route path="/news/create" element={<ArticleCreatePage/>}/>
+            <Route path="/admin/news" element={<AdminArticlesPage />} />
             <Route path="/admin/users" element={<UsersPage/>}/>
             <Route path="/ski-game" element={<SkiGame/>}/>
             <Route path="/news/:id" element={<NewPage/>}/>

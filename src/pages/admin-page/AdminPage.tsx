@@ -55,7 +55,7 @@ const AdminPage = () => {
                         <button className="bg-indigo-700 text-white px-6 py-3 rounded hover:bg-indigo-800 transition">
                             🗂 Добавление курортов
                         </button>
-                        <button className="bg-indigo-700 text-white px-6 py-3 rounded hover:bg-indigo-800 transition">
+                        <button onClick={() => navigate("/admin/news")} className="bg-indigo-700 text-white px-6 py-3 rounded hover:bg-indigo-800 transition">
                             📢 Публикация новостей
                         </button>
                     </div>

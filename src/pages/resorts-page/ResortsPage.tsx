@@ -12,10 +12,13 @@ const ResortsPage = () => {
   return (
     <div className={styles["resorts-page"]}>
       <Header></Header>
-      <section className=" sm:py-10 bg-[#d9dde9] ">
-        <ResortsQuickSearch></ResortsQuickSearch>
-        <ResortsMap />
-      </section>
+        <section className="sm:py-10 bg-[#d9dde9] px-4 sm:px-6">
+            <div className="max-w-7xl mx-auto">
+                <ResortsQuickSearch />
+                <ResortsMap />
+            </div>
+        </section>
+
 
       <div className="wave-divider">
         <svg

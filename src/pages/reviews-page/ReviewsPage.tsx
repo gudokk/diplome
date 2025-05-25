@@ -26,29 +26,71 @@ interface Review {
   created_at: string;
   average_rating: number;
 }
+const ratingLabels: { [key: string]: string } = {
+  rating_skiing: "Катание",
+  rating_lifts: "Подъемники",
+  rating_prices: "Цены",
+  rating_snow_weather: "Снег и погода",
+  rating_accommodation: "Жилье",
+  rating_people: "Публика",
+  rating_apres_ski: "Досуг",
+};
 
 const StarRating = ({ rating }: { rating: number }) => {
   const fullStars = Math.floor(rating);
-  const halfStar = rating % 1 >= 0.5;
+  const hasHalfStar = rating % 1 >= 0.25 && rating % 1 < 0.75;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   return (
-    <div className="flex items-center">
-      {Array.from({ length: fullStars }).map((_, i) => (
-        <span key={i} className="text-orange-500 text-xl">
-          ★
-        </span>
-      ))}
-      {halfStar && <span className="text-orange-500 text-xl">½</span>}
-      {Array.from({ length: 5 - fullStars - (halfStar ? 1 : 0) }).map(
-        (_, i) => (
-          <span key={i} className="text-gray-300 text-xl">
-            ★
-          </span>
-        )
-      )}
-    </div>
+      <div className="flex items-center space-x-0.5">
+        {Array.from({ length: fullStars }).map((_, i) => (
+            <svg
+                key={`full-${i}`}
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 text-orange-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+            >
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448 1.287 3.956c.3.922-.755 1.688-1.539 1.118L10 13.348l-3.374 2.868c-.783.57-1.838-.196-1.539-1.118l1.287-3.956-3.37-2.448c-.783-.57-.38-1.81.588-1.81h4.162l1.286-3.957z" />
+            </svg>
+        ))}
+
+        {hasHalfStar && (
+            <svg
+                key="half"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 text-orange-500"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+            >
+              <defs>
+                <linearGradient id="half-grad">
+                  <stop offset="50%" stopColor="currentColor" />
+                  <stop offset="50%" stopColor="lightgray" />
+                </linearGradient>
+              </defs>
+              <path
+                  fill="url(#half-grad)"
+                  d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448 1.287 3.956c.3.922-.755 1.688-1.539 1.118L10 13.348l-3.374 2.868c-.783.57-1.838-.196-1.539-1.118l1.287-3.956-3.37-2.448c-.783-.57-.38-1.81.588-1.81h4.162l1.286-3.957z"
+              />
+            </svg>
+        )}
+
+        {Array.from({ length: emptyStars }).map((_, i) => (
+            <svg
+                key={`empty-${i}`}
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 text-gray-300"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+            >
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448 1.287 3.956c.3.922-.755 1.688-1.539 1.118L10 13.348l-3.374 2.868c-.783.57-1.838-.196-1.539-1.118l1.287-3.956-3.37-2.448c-.783-.57-.38-1.81.588-1.81h4.162l1.286-3.957z" />
+            </svg>
+        ))}
+      </div>
   );
 };
+
 
 const ReviewsList = () => {
   const [expandedReviewId, setExpandedReviewId] = useState<number | null>(null);
@@ -133,18 +175,16 @@ const ReviewsList = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 ">
             {Object.entries(average).map(([key, value]) => (
-              <div
-                key={key}
-                className="text-gray-900 flex justify-between items-center border gap-10 p-4 rounded-md bg-gray-50"
-              >
-                <span className="capitalize">
-                  {key.replace("rating_", "").replace("_", " ")}
-                </span>
-                <div className=" flex items-center gap-2">
-                  <StarRating rating={value} />
-                  <span className="text-gray-900">({value})</span>
+                <div
+                    key={key}
+                    className="text-gray-900 flex justify-between items-center border gap-10 p-4 rounded-md bg-gray-50"
+                >
+                  <span className="font-medium">{ratingLabels[key] || key}</span>
+                  <div className="flex items-center gap-2">
+                    <StarRating rating={value} />
+                    <span className="text-gray-900">({value})</span>
+                  </div>
                 </div>
-              </div>
             ))}
           </div>
         </div>

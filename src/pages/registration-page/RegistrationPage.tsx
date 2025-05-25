@@ -141,7 +141,8 @@ const RegistrationPage = () => {
     <div className="flex flex-col min-h-screen">
       <Header></Header>
       <main className="flex-grow flex items-center justify-center">
-        <div className="items-center bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-auto mt-12 animate-fade-in">
+        <div className="px-4 sm:px-0 w-full">
+          <div className="items-center bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-auto mt-12 animate-fade-in">
           <h2 className="text-2xl font-bold text-center text-indigo-800 mb-8">
             Создать аккаунт
           </h2>
@@ -151,14 +152,14 @@ const RegistrationPage = () => {
                 htmlFor="username"
                 className="block text-indigo-900 font-semibold mb-2"
               >
-                Username
+                Логин
               </label>
               <input
                 type="text"
                 id="username"
                 name="username"
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
-                placeholder="Enter your username"
+                placeholder="Введите ваш логин"
                 value={formData.username}
                 onChange={handleChange}
               />
@@ -172,14 +173,14 @@ const RegistrationPage = () => {
                 htmlFor="email"
                 className="block text-indigo-900 font-semibold mb-2"
               >
-                Email
+                Почта
               </label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
-                placeholder="Enter your email"
+                placeholder="Введите вашу почту"
                 value={formData.email}
                 onChange={handleChange}
               />
@@ -193,14 +194,14 @@ const RegistrationPage = () => {
                 htmlFor="password"
                 className="block text-indigo-900 font-semibold mb-2"
               >
-                Password
+                Пароль
               </label>
               <input
                 type="password"
                 id="password"
                 name="password"
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
-                placeholder="Enter your password"
+                placeholder="Придумайте пароль"
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -214,14 +215,14 @@ const RegistrationPage = () => {
                 htmlFor="confirm-password"
                 className="block text-indigo-900 font-semibold mb-2"
               >
-                Confirm Password
+                Подтвердите пароль
               </label>
               <input
                 type="password"
                 id="confirm-password"
                 name="confirmPassword"
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-800 transition-all duration-300"
-                placeholder="Confirm your password"
+                placeholder="Подтвердите пароль"
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
@@ -236,7 +237,7 @@ const RegistrationPage = () => {
               type="submit"
               className="w-full bg-indigo-800 text-white py-3 rounded-lg font-semibold hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-indigo-800 focus:ring-offset-2 transition-all duration-300 transform hover:scale-[1.02]"
             >
-              Register
+              Зарегистрироваться
             </button>
           </form>
 
@@ -249,6 +250,7 @@ const RegistrationPage = () => {
               Войти
             </Link>
           </p>
+          </div>
         </div>
       </main>
       <Footer></Footer>

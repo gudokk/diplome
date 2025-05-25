@@ -11,8 +11,11 @@ function MainPage() {
         <Header></Header>
       </div>
       <NewsList></NewsList>
-      {/*<div className="h-1 max-w-6xl bg-white mb-10 mt-10 mx-auto " />*/}
+        <section className="sm:py-10 px-4 sm:px-6">
+            <div className="max-w-7xl mx-auto">
       <ResortsQuickSearch></ResortsQuickSearch>
+            </div>
+            </section>
       <Footer></Footer>
     </div>
   );

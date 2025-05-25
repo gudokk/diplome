@@ -56,6 +56,7 @@ const ProfilePage = () => {
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow flex items-center justify-center">
+          <div className="px-4 sm:px-0 w-full mt-5">
           <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-auto p-8 transition-all duration-300 animate-fade-in">
             <div className="flex flex-col md:flex-row">
               <div className="md:w-1/3 text-center mb-8 md:mb-0">
@@ -87,17 +88,17 @@ const ProfilePage = () => {
               </div>
               <div className="md:w-2/3 md:pl-8">
                 <h2 className="text-xl font-semibold text-indigo-800 mb-4">Информация</h2>
-                <ul className="space-y-2 text-gray-700">
+                <ul className="space-y-2 text-gray-700 mb-5">
                   <li><strong>Email:</strong> {user.email}</li>
                   <li><strong>Дата регистрации:</strong> {user.registration_date}</li>
                   <li><strong>Пол:</strong> {user.gender || "Не указан"}</li>
                   <li><strong>Роль:</strong> {user.is_admin ? "Администратор" : "Пользователь"}</li>
                 </ul>
-                <Link to="/ski-game" className="flex flex-col items-center text-gray-500 hover:text-gray-500/75">
-                  <span>Статьи</span>
-                </Link>
+                {/*<Link to="/ski-game" className="flex flex-col items-center text-gray-500 hover:text-gray-500/75">*/}
+                {/*  <span>Статьи</span>*/}
+                {/*</Link>*/}
                 <Link
-                    to="/articles/create"
+                    to="/news/create"
                     className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-800"
                 >
                   ✍ Создать новость
@@ -105,6 +106,7 @@ const ProfilePage = () => {
 
               </div>
             </div>
+          </div>
           </div>
         </main>
         <Footer />
