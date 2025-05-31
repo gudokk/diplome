@@ -1,9 +1,10 @@
 // ProfilePage.tsx
 import { useEffect, useState } from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 import defaultPhoto from "../../assets/account-photo.jpg";
+import BloggerRequestForm from "../../shared/ui/blogger-request/BloggerRequestForm";
 
 interface User {
   id: number;
@@ -14,10 +15,25 @@ interface User {
   gender: string;
   photo: string | null;
   is_admin: boolean;
+  is_blogger: boolean;
+  has_pending_blogger_request: boolean;
+  friends_count?: number;
+}
+
+function pluralizeFriend(n: number): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+
+  if (mod10 === 1 && mod100 !== 11) return `${n} друг`;
+  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20))
+    return `${n} друга`;
+  return `${n} друзей`;
 }
 
 const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [search, setSearch] = useState("");
+  const [results, setResults] = useState<User[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,15 +45,15 @@ const ProfilePage = () => {
         Authorization: `Bearer ${token}`,
       },
     })
-        .then((res) => {
-          if (!res.ok) throw new Error("Unauthorized");
-          return res.json();
-        })
-        .then((data) => setUser(data))
-        .catch(() => {
-          localStorage.removeItem("token");
-          navigate("/authorization");
-        });
+      .then((res) => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+      })
+      .then((data) => setUser(data))
+      .catch(() => {
+        localStorage.removeItem("token");
+        navigate("/authorization");
+      });
   }, [navigate]);
 
   const handleLogout = () => {
@@ -49,68 +65,131 @@ const ProfilePage = () => {
     navigate("/profile/edit");
   };
 
+  const handleSearch = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const res = await fetch(
+      `/back/api/users/search?query=${encodeURIComponent(search)}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    if (res.ok) {
+      const data = await res.json();
+      setResults(data);
+    } else {
+      alert("Ошибка поиска пользователей");
+    }
+  };
+
+  const addFriend = async (id: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const res = await fetch(`/back/api/friends/add/${id}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) {
+      alert("Пользователь добавлен в друзья");
+    } else {
+      alert("Не удалось добавить в друзья");
+    }
+  };
 
   if (!user) return null;
 
   return (
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <main className="flex-grow flex items-center justify-center">
-          <div className="px-4 sm:px-0 w-full mt-5">
-          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full mx-auto p-8 transition-all duration-300 animate-fade-in">
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-grow flex flex-col items-center justify-center mt-4 px-4">
+        <div className="px-4 sm:px-0 w-full">
+          <div className="bg-white rounded-xl shadow-2xl max-w-5xl w-full mx-auto p-8">
             <div className="flex flex-col md:flex-row">
               <div className="md:w-1/3 text-center mb-8 md:mb-0">
                 <img
-                    src={user.photo ? `http://localhost:8000${user.photo}` : defaultPhoto}
-                    alt="Profile Picture"
-                    className="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-blue-800 transition-transform duration-300 hover:scale-105"
+                  src={
+                    user.photo
+                      ? `http://localhost:8000${user.photo}`
+                      : defaultPhoto
+                  }
+                  alt="Profile Picture"
+                  className="rounded-full w-48 h-48 mx-auto mb-4 border-4 border-blue-800 object-cover"
                 />
                 <h1 className="text-2xl font-bold text-blue-800 mb-2">
                   {user.username}
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-gray-600 mb-2">
                   {user.description || "Нет описания"}
                 </p>
+                {/* Блок друзей */}
+                <Link
+                  to="/profile/friends"
+                  className="text-sm text-gray-700 hover:underline"
+                >
+                  {pluralizeFriend(user.friends_count || 0)}
+                </Link>
+              </div>
+              <div className="md:w-1/3 md:pl-8">
+                <h2 className="text-xl font-semibold text-blue-800 mb-4">
+                  Информация
+                </h2>
+                <ul className="space-y-2 text-gray-700 mb-5">
+                  <li>
+                    <strong>Email:</strong> {user.email}
+                  </li>
+                  <li>
+                    <strong>Дата регистрации:</strong> {user.registration_date}
+                  </li>
+                  <li>
+                    <strong>Пол:</strong> {user.gender || "Не указан"}
+                  </li>
+                  <li>
+                    <strong>Роль:</strong>{" "}
+                    {user.is_admin ? "Администратор" : "Пользователь"}
+                  </li>
+                </ul>
+              </div>
+              <div className="md:w-1/3 md:pl-8">
                 <div className="flex flex-col gap-4 mt-6">
+                  <Link
+                    to="/ski-game"
+                    className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 text-center"
+                  >
+                    Играть в игру
+                  </Link>
+                  <Link
+                    to="/news/create"
+                    className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 text-center"
+                  >
+                    ✍ Создать новость
+                  </Link>
+
+                  <BloggerRequestForm
+                    isBlogger={user.is_blogger}
+                    hasPending={user.has_pending_blogger_request}
+                  />
                   <button
-                      onClick={handleEditProfile}
-                      className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 transition-colors duration-300"
+                    onClick={handleEditProfile}
+                    className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900"
                   >
                     Редактировать профиль
                   </button>
                   <button
-                      onClick={handleLogout}
-                      className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors duration-300"
+                    onClick={handleLogout}
+                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
                   >
                     Выйти
                   </button>
                 </div>
               </div>
-              <div className="md:w-2/3 md:pl-8">
-                <h2 className="text-xl font-semibold text-indigo-800 mb-4">Информация</h2>
-                <ul className="space-y-2 text-gray-700 mb-5">
-                  <li><strong>Email:</strong> {user.email}</li>
-                  <li><strong>Дата регистрации:</strong> {user.registration_date}</li>
-                  <li><strong>Пол:</strong> {user.gender || "Не указан"}</li>
-                  <li><strong>Роль:</strong> {user.is_admin ? "Администратор" : "Пользователь"}</li>
-                </ul>
-                {/*<Link to="/ski-game" className="flex flex-col items-center text-gray-500 hover:text-gray-500/75">*/}
-                {/*  <span>Статьи</span>*/}
-                {/*</Link>*/}
-                <Link
-                    to="/news/create"
-                    className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-800"
-                >
-                  ✍ Создать новость
-                </Link>
-
-              </div>
             </div>
           </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 };
 

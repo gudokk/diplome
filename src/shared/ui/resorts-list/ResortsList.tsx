@@ -73,7 +73,7 @@ const ResortsTable = ({ searchQuery }: ResortsTableProps) => {
           <tr>
             {renderHeader("Курорт", "name", "text-blue-700")}
             {renderHeader("Трассы (km)", "total_km")}
-            {renderHeader("Мин. высота", "min_height")}
+            {renderHeader("Перепад высот", "min_height")}
             {renderHeader("Макс. высота", "max_height")}
             {renderHeader("Зелёные", "green", "text-green-600")}
             {renderHeader("Синие", "blue", "text-blue-600")}

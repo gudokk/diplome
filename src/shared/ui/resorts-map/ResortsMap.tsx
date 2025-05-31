@@ -18,15 +18,7 @@ const ResortsMap = () => {
   }, []);
 
   return (
-      <div className="w-full px-4 sm:px-6 max-w-7xl mx-auto h-[500px] mb-10">
-    {/*// <div*/}
-    {/*//   id="map-container"*/}
-    {/*//   style={{*/}
-    {/*//     width: "64em",*/}
-    {/*//     height: "32em",*/}
-    {/*//     margin: "0 auto",*/}
-    {/*//   }}*/}
-    {/*// >*/}
+    <div className="w-full px-4 sm:px-6 max-w-7xl mx-auto h-[500px] mb-10">
       <YMaps
         query={{
           apikey: "df26c33f-b6e4-4442-bc85-0c1c3461ed2a",
