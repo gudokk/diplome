@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ArticleCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -22,7 +23,6 @@ const ArticleCreatePage = () => {
     formData.append("content", content);
     if (image) formData.append("image", image);
     formData.append("tags", JSON.stringify(tags));
-    console.log("tags field:", formData.get("tags"));
 
     const response = await fetch("/back/api/news/create", {
       method: "POST",
@@ -33,7 +33,7 @@ const ArticleCreatePage = () => {
     });
 
     if (response.ok) {
-      alert("Новость отправлена на модерацию");
+      toast.success("Новость отправлена на модерацию!");
       navigate("/profile");
     } else {
       alert("Ошибка при создании статьи");
@@ -72,14 +72,11 @@ const ArticleCreatePage = () => {
             className="bg-white p-8 rounded-xl shadow-md max-w-xl w-full space-y-4"
           >
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
-              <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl font-semibold text-blue-800">
                 Создание новости
-              </h1>
-              <Link
-                to="/profile"
-                className="text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-600 hover:text-white transition text-center"
-              >
-                Назад
+              </h2>
+              <Link to="/profile" className="text-blue-800 hover:underline">
+                ← Назад к профилю
               </Link>
             </div>
 
@@ -113,7 +110,7 @@ const ArticleCreatePage = () => {
                 <button
                   type="button"
                   onClick={handleAddTag}
-                  className="px-4 py-2 bg-indigo-700 text-white rounded hover:bg-indigo-800"
+                  className="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800"
                 >
                   +
                 </button>
@@ -122,7 +119,7 @@ const ArticleCreatePage = () => {
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm flex items-center"
+                    className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center"
                   >
                     {tag}
                     <button

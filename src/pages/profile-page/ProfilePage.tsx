@@ -5,6 +5,7 @@ import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 import defaultPhoto from "../../assets/account-photo.jpg";
 import BloggerRequestForm from "../../shared/ui/blogger-request/BloggerRequestForm";
+import calendarBanner from "../../assets/calendar-banner.png";
 
 interface User {
   id: number;
@@ -65,39 +66,6 @@ const ProfilePage = () => {
     navigate("/profile/edit");
   };
 
-  const handleSearch = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const res = await fetch(
-      `/back/api/users/search?query=${encodeURIComponent(search)}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    if (res.ok) {
-      const data = await res.json();
-      setResults(data);
-    } else {
-      alert("Ошибка поиска пользователей");
-    }
-  };
-
-  const addFriend = async (id: number) => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const res = await fetch(`/back/api/friends/add/${id}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (res.ok) {
-      alert("Пользователь добавлен в друзья");
-    } else {
-      alert("Не удалось добавить в друзья");
-    }
-  };
-
   if (!user) return null;
 
   return (
@@ -152,12 +120,25 @@ const ProfilePage = () => {
                 </ul>
               </div>
               <div className="md:w-1/3 md:pl-8">
-                <div className="flex flex-col gap-4 mt-6">
-                  <Link
+                <div className="flex flex-col  gap-4 ">
+                  {/* <Link
                     to="/ski-game"
                     className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 text-center"
                   >
                     Играть в игру
+                  </Link> */}
+                  <Link
+                    to="/calendar"
+                    className="flex flex-col justify-center px-10"
+                  >
+                    <img
+                      src={calendarBanner}
+                      alt="Перейти в календарь поездок"
+                      className="w-30 h-30 transition hover:opacity-90"
+                    />
+                    <p className="text-sm text-blue-800 mt-2 hover:underline text-center">
+                      Перейти в календарь
+                    </p>
                   </Link>
                   <Link
                     to="/news/create"
@@ -176,6 +157,7 @@ const ProfilePage = () => {
                   >
                     Редактировать профиль
                   </button>
+
                   <button
                     onClick={handleLogout}
                     className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"

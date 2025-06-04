@@ -82,7 +82,7 @@ const BloggerRequestForm = ({ isBlogger, hasPending }: Props) => {
     return (
       <Link
         to="/blogger-overview"
-        className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-green-800 text-center"
+        className="bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-900 text-center"
       >
         📚 Обзор от блогера
       </Link>

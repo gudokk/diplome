@@ -73,7 +73,6 @@ const FriendsPage = () => {
     });
 
     if (res.ok) {
-      //   alert("Заявка отправлена");
       setResults((prev) => prev.filter((u) => u.id !== id));
     } else {
       alert("Не удалось отправить заявку");
@@ -239,7 +238,9 @@ const FriendsPage = () => {
                       alt=""
                       className="w-10 h-10 rounded-full object-cover border"
                     />
-                    <span>{req.username}</span>
+                    <Link to={`/users/${req.id}`} className="hover:underline">
+                      {req.username}
+                    </Link>
                   </div>
                   <div className="flex gap-2">
                     <button
@@ -280,7 +281,9 @@ const FriendsPage = () => {
                     className="w-16 h-16 rounded-full object-cover border"
                   />
                   <span className="text-sm mt-1 text-gray-900">
-                    {user.username}
+                    <Link to={`/users/${user.id}`} className="hover:underline">
+                      {user.username}
+                    </Link>
                   </span>
                 </div>
               ))}

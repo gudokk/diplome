@@ -119,7 +119,7 @@ export const Header = () => {
         {/* Профиль и выход */}
         {username ? (
           <div className="hidden md:flex items-center gap-4 text-sm text-gray-700">
-            <div className="flex flex-col text-right">
+            <div className="flex flex-col text-center">
               {isAdmin && (
                 <span className="text-xs text-red-600 font-semibold uppercase">
                   Панель администратора

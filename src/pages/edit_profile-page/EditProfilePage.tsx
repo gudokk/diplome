@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface UserData {
   username: string;
@@ -54,15 +55,24 @@ const EditProfilePage = () => {
     form.append("email", formData.email);
     form.append("description", formData.description);
     form.append("gender", formData.gender);
-    if (file) form.append("photo", file);
+    form.append("photo_delete", deletePhoto.toString());
 
-    await fetch("/back/api/profile/update", {
+    if (file) {
+      form.append("photo", file);
+    }
+
+    const res = await fetch("/back/api/profile/update", {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
       body: form,
     });
 
-    navigate("/profile");
+    if (res.ok) {
+      toast.success("Профиль успешно обновлён!");
+      navigate("/profile");
+    } else {
+      toast.error("Ошибка при обновлении профиля");
+    }
   };
 
   return (
@@ -72,14 +82,11 @@ const EditProfilePage = () => {
         <div className="px-4 sm:px-0 w-full">
           <div className="bg-white mt-5 rounded-xl shadow-2xl max-w-4xl w-full mx-auto p-8 transition-all duration-300 animate-fade-in">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
-              <h1 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-xl font-semibold text-blue-800">
                 Редактирование профиля
-              </h1>
-              <Link
-                to="/profile"
-                className="text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-600 hover:text-white transition text-center"
-              >
-                Назад
+              </h2>
+              <Link to="/profile" className="text-blue-800 hover:underline">
+                ← Назад к профилю
               </Link>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
