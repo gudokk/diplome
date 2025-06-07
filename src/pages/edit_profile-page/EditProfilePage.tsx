@@ -96,7 +96,7 @@ const EditProfilePage = () => {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="Имя"
-                className="w-full p-2 border rounded"
+                className="w-full p-2 bg-white text-gray-600 border rounded"
               />
               <p className="text-gray-600">Email</p>
               <input
@@ -104,7 +104,7 @@ const EditProfilePage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email"
-                className="w-full p-2 border rounded"
+                className="w-full p-2 bg-white text-gray-600 border rounded"
               />
               <p className="text-gray-600">Описание</p>
               <textarea
@@ -112,14 +112,14 @@ const EditProfilePage = () => {
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Описание"
-                className="w-full p-2 border rounded"
+                className="w-full p-2 bg-white text-gray-600 border rounded"
               />
               <p className="text-gray-600">Пол</p>
               <select
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full p-2 border rounded"
+                className="bg-white text-gray-600 w-full p-2 border rounded"
               >
                 <option value="">Не указан</option>
                 <option value="Мужской">Мужской</option>

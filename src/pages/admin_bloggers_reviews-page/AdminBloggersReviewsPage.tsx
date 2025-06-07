@@ -85,7 +85,7 @@ export default function BloggerReviewModerationPage() {
                       {review.title}
                     </h2>
                     <div
-                      className="prose prose-sm text-gray-700 mb-3"
+                      className="text-gray-700 mb-3"
                       dangerouslySetInnerHTML={{ __html: review.content }}
                     />
                   </div>

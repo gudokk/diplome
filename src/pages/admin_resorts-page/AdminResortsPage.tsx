@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 import { Link } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import toast from "react-hot-toast";
 
 const trailTypes = ["Зелёная", "Синяя", "Красная", "Чёрная"];
 
@@ -16,6 +19,7 @@ const AddResortPage = () => {
     max_height: 0,
     season: "",
     country: "",
+    visa: false,
   });
 
   const [coordinates, setCoordinates] = useState({
@@ -67,6 +71,7 @@ const AddResortPage = () => {
   });
 
   const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -112,8 +117,22 @@ const AddResortPage = () => {
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setImages(Array.from(e.target.files));
+      const filesArray = Array.from(e.target.files);
+      setImages((prev) => [...prev, ...filesArray]);
+      setImagePreviews((prev) => [
+        ...prev,
+        ...filesArray.map((file) => URL.createObjectURL(file)),
+      ]);
     }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const updatedImages = [...images];
+    const updatedPreviews = [...imagePreviews];
+    updatedImages.splice(index, 1);
+    updatedPreviews.splice(index, 1);
+    setImages(updatedImages);
+    setImagePreviews(updatedPreviews);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -143,11 +162,11 @@ const AddResortPage = () => {
     });
 
     if (res.ok) {
-      alert("Курорт успешно добавлен");
+      toast.success("Курорт успешно добавлен");
       navigate("/admin");
     } else {
       const err = await res.json();
-      alert(`Ошибка: ${err.detail}`);
+      toast.error(err.detail || "Ошибка при добавлении курорта");
     }
   };
 
@@ -192,7 +211,7 @@ const AddResortPage = () => {
                   value={form.name}
                   onChange={handleFormChange}
                   placeholder="Введите название курорта"
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                  className="w-full rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm"
                 />
               </div>
               <div>
@@ -202,19 +221,35 @@ const AddResortPage = () => {
                   value={form.country}
                   onChange={handleFormChange}
                   placeholder="Страна"
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                  className="w-full rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm"
                 />
               </div>
-              <div className="sm:col-span-2">
+              <label className="inline-flex items-center mt-2">
+                <input
+                  type="checkbox"
+                  name="visa"
+                  checked={form.visa}
+                  onChange={(e) => setForm({ ...form, visa: e.target.checked })}
+                  className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                />
+                <span className="ml-2 text-sm text-gray-700">
+                  Требуется виза
+                </span>
+              </label>
+
+              <div className="sm:col-span-2 text-black">
                 <label className="block text-gray-700 font-medium mb-1">
                   Описание
                 </label>
-                <textarea
-                  name="information"
-                  value={form.information}
-                  onChange={handleFormChange}
-                  placeholder="Краткое описание курорта"
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={form.information}
+                  onChange={(_, editor) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      information: editor.getData(),
+                    }))
+                  }
                 />
               </div>
               <div>
@@ -226,7 +261,7 @@ const AddResortPage = () => {
                   type="number"
                   value={form.trail_length}
                   onChange={handleFormChange}
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                  className="w-full rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm"
                 />
               </div>
               <div>
@@ -238,7 +273,7 @@ const AddResortPage = () => {
                   type="number"
                   value={form.max_height}
                   onChange={handleFormChange}
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                  className="w-full rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm"
                 />
               </div>
               <div>
@@ -250,7 +285,7 @@ const AddResortPage = () => {
                   value={form.season}
                   onChange={handleFormChange}
                   placeholder="например, декабрь-март"
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                  className="w-full rounded-xl border bg-white border-gray-300 p-3 text-sm shadow-sm"
                 />
               </div>
               <div>
@@ -263,7 +298,7 @@ const AddResortPage = () => {
                   value={coordinates.latitude}
                   onChange={handleCoordinatesChange}
                   placeholder="например, 45.123"
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                  className="w-full rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm"
                 />
               </div>
               <div>
@@ -276,7 +311,7 @@ const AddResortPage = () => {
                   value={coordinates.longitude}
                   onChange={handleCoordinatesChange}
                   placeholder="например, 6.456"
-                  className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                  className="w-full rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm"
                 />
               </div>
             </div>
@@ -287,15 +322,19 @@ const AddResortPage = () => {
                 Дополнительная информация
               </h2>
               <div className="grid grid-cols-1 gap-4">
-                <div>
+                <div className="text-black">
                   <label className="block text-sm font-medium text-gray-600 mb-1">
                     Как добраться
                   </label>
-                  <textarea
-                    name="how_to_get_there"
-                    value={extraInfo.how_to_get_there}
-                    onChange={handleExtraInfoChange}
-                    className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={extraInfo.how_to_get_there}
+                    onChange={(_, editor) =>
+                      setExtraInfo((prev) => ({
+                        ...prev,
+                        how_to_get_there: editor.getData(),
+                      }))
+                    }
                   />
                 </div>
                 <div>
@@ -306,7 +345,7 @@ const AddResortPage = () => {
                     name="nearby_cities"
                     value={extraInfo.nearby_cities}
                     onChange={handleExtraInfoChange}
-                    className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                    className="w-full rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm"
                   />
                 </div>
                 <div>
@@ -317,7 +356,7 @@ const AddResortPage = () => {
                     name="related_ski_areas"
                     value={extraInfo.related_ski_areas}
                     onChange={handleExtraInfoChange}
-                    className="w-full rounded-xl border border-gray-300 p-3 text-sm shadow-sm"
+                    className="w-full rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm"
                   />
                 </div>
               </div>
@@ -381,7 +420,7 @@ const AddResortPage = () => {
                       name={key}
                       value={features[key as keyof typeof features] as number}
                       onChange={handleFeaturesChange}
-                      className="rounded-xl border border-gray-300 p-3 text-sm shadow-sm w-full"
+                      className="rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm w-full"
                     />
                   </div>
                 ))}
@@ -396,7 +435,7 @@ const AddResortPage = () => {
                   name="freeride_opportunities"
                   value={features.freeride_opportunities}
                   onChange={handleFeaturesChange}
-                  className="rounded-xl border border-gray-300 p-3 text-sm shadow-sm w-full"
+                  className="rounded-xl border bg-white border-gray-300 text-gray-600 p-3 text-sm shadow-sm w-full"
                 >
                   <option value="неизвестно">Неизвестно</option>
                   <option value="плохие">Плохие</option>
@@ -415,7 +454,7 @@ const AddResortPage = () => {
                     onChange={(e) =>
                       handleTrackChange(i, "trail_type", e.target.value)
                     }
-                    className="rounded-xl border border-gray-300 p-2 text-sm"
+                    className="rounded-xl border bg-white border-gray-300 text-gray-600 p-2 text-sm"
                   >
                     {trailTypes.map((type) => (
                       <option key={type}>{type}</option>
@@ -432,7 +471,7 @@ const AddResortPage = () => {
                       )
                     }
                     placeholder="Длина (км)"
-                    className="rounded-xl border border-gray-300 p-2 w-32 text-sm"
+                    className="rounded-xl border bg-white border-gray-300 text-gray-600 p-2 w-32 text-sm"
                   />
                 </div>
               ))}
@@ -462,7 +501,7 @@ const AddResortPage = () => {
                       value={value}
                       placeholder={skiPassLabels[key]}
                       onChange={handleSkiPassChange}
-                      className="rounded-xl border border-gray-300 p-3 text-sm shadow-sm w-full"
+                      className="rounded-xl border bg-white border-gray-300 p-3 text-gray-600 text-sm shadow-sm w-full"
                     />
                   </div>
                 ))}
@@ -480,6 +519,33 @@ const AddResortPage = () => {
                 onChange={handleImageUpload}
                 className="text-sm"
               />
+              {images.length > 0 && (
+                <ul className="mt-3 space-y-2">
+                  {images.map((file, index) => (
+                    <li
+                      key={index}
+                      className="flex items-center justify-between bg-gray-100 px-3 py-2 rounded shadow-sm text-sm text-black"
+                    >
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={imagePreviews[index]}
+                          alt={`preview-${index}`}
+                          className="w-20 h-14 object-cover rounded"
+                        />
+                        <span className="truncate max-w-xs">{file.name}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="text-red-600 hover:text-red-800 font-bold ml-4"
+                        aria-label="Удалить"
+                      >
+                        ×
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
             <button

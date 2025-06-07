@@ -76,7 +76,7 @@ export default function CreateTripForm({
       </h3>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm  font-medium text-gray-700">
           Курорт
         </label>
         <input

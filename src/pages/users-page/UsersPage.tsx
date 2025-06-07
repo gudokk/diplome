@@ -66,7 +66,6 @@ export default function UsersPage() {
             <table className="min-w-[600px] w-full border text-sm">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="p-2 text-black text-left">ID</th>
                   <th className="p-2 text-black text-left">Username</th>
                   <th className="p-2 text-black  text-left">Email</th>
                   <th className="p-2 text-black  text-left">Дата рег.</th>
@@ -78,7 +77,6 @@ export default function UsersPage() {
               <tbody>
                 {users.map((user) => (
                   <tr key={user.id} className="border-t">
-                    <td className="p-2 text-black ">{user.id}</td>
                     <td className="p-2 text-black ">{user.username}</td>
                     <td className="p-2 text-black ">{user.email}</td>
                     <td className="p-2 text-black ">

@@ -74,13 +74,13 @@ const AdminPage = () => {
                 onClick={() => navigate("/admin/blogger-reviews")}
                 className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-indigo-800 transition"
               >
-                💬 Модерация обзоров от блогеров
+                ✉️ Модерация обзоров от блогеров
               </button>
               <button
                 onClick={() => navigate("/admin/news")}
                 className="bg-blue-800 text-white px-6 py-3 rounded-lg hover:bg-indigo-800 transition"
               >
-                📢 Публикация новостей
+                📝 Публикация новостей
               </button>
               <button
                 onClick={() => navigate("/admin/reviews")}

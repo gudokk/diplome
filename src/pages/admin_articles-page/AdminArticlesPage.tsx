@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 interface Article {
   id: number;
@@ -117,12 +118,12 @@ const AdminArticlesPage = () => {
                     <input
                       value={editedTitle}
                       onChange={(e) => setEditedTitle(e.target.value)}
-                      className="w-full p-2 border rounded"
+                      className="w-full bg-white text-gray-600 p-2 border rounded"
                     />
                     <textarea
                       value={editedContent}
                       onChange={(e) => setEditedContent(e.target.value)}
-                      className="w-full p-2 border rounded"
+                      className="w-full bg-white text-gray-600 p-2 border rounded"
                       rows={5}
                     />
                     <button
@@ -148,7 +149,10 @@ const AdminArticlesPage = () => {
                         className="w-full max-h-64 object-cover rounded"
                       />
                     )}
-                    <p className="text-gray-800">{article.content}</p>
+                    <p
+                      className="text-gray-800"
+                      dangerouslySetInnerHTML={{ __html: article.content }}
+                    />
                   </>
                 )}
                 <div className="flex flex-col sm:flex-row gap-3 pt-2">

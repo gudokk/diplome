@@ -32,10 +32,10 @@ const ResortsQuickSearch = () => {
     const params = new URLSearchParams();
     if (slopes) params.set("slopes", slopes);
     if (visa !== "any") params.set("visa", visa);
-    if (recentSnow) params.set("recentSnow", "true");
-    if (expectedSnow) params.set("expectedSnow", "true");
+    if (recentSnow) params.set("snow_last_3_days", "true");
+    if (expectedSnow) params.set("snow_expected", "true");
 
-    setSearchParams(params);
+    navigate(`/resorts/selector?${params.toString()}`);
   };
 
   return (
@@ -50,7 +50,7 @@ const ResortsQuickSearch = () => {
         <div>
           <div className="text-lg font-semibold mb-2 text-gray-950">Трассы</div>
           <div className="flex gap-2 text-gray-950">
-            {["Синие", "Красные", "Черные"].map((color) => (
+            {["Синяя", "Красная", "Чёрная"].map((color) => (
               <button
                 key={color}
                 onClick={() => setSlopes(color)}
@@ -72,12 +72,13 @@ const ResortsQuickSearch = () => {
               <input
                 type="radio"
                 name="visa"
-                value="any"
-                checked={visa === "any"}
-                onChange={() => setVisa("any")}
+                value="yes"
+                checked={visa === "yes"}
+                onChange={() => setVisa("yes")}
               />
-              Любая виза
+              Только с визой
             </label>
+
             <label className="flex items-center gap-1 text-gray-950">
               <input
                 type="radio"
@@ -116,15 +117,7 @@ const ResortsQuickSearch = () => {
 
         <div className="ml-auto flex gap-3 mt-4 sm:mt-0">
           <button
-            onClick={() => {
-              const params = new URLSearchParams();
-              if (slopes) params.set("slopes", slopes);
-              if (visa !== "any") params.set("visa", visa);
-              if (recentSnow) params.set("snow_last_3_days", "true");
-              if (expectedSnow) params.set("snow_expected", "true");
-
-              navigate(`/resorts/selector?${params.toString()}`);
-            }}
+            onClick={handleSearch}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
           >
             Найти курорт
@@ -138,40 +131,6 @@ const ResortsQuickSearch = () => {
           </button>
         </div>
       </div>
-
-      {/* Блок результатов */}
-      {hasSearch && (
-        <div className="mt-10">
-          <h3 className="text-2xl font-bold mb-4">Результаты поиска</h3>
-          {resorts.length === 0 ? (
-            <p className="text-gray-600">
-              Ничего не найдено по заданным фильтрам.
-            </p>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {resorts.map((resort) => (
-                <div
-                  key={resort.id}
-                  className="bg-white shadow rounded p-4 border border-gray-100"
-                >
-                  <h4 className="text-xl font-semibold text-black mb-2">
-                    {resort.name}
-                  </h4>
-                  <p className="text-sm text-gray-600">
-                    {resort.country || "Страна не указана"}
-                  </p>
-                  <p className="text-sm text-gray-700 mt-2">
-                    Трассы: {resort.trails_km || 0} км
-                  </p>
-                  <p className="text-sm text-gray-700">
-                    Высота: {resort.altitude_min} - {resort.altitude_max} м
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };

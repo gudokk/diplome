@@ -62,7 +62,7 @@ const BlogersReviewPage = () => {
                     {review.title}
                   </h2>
                   <div
-                    className="prose prose-sm text-gray-700"
+                    className=" text-gray-700"
                     dangerouslySetInnerHTML={{ __html: review.content }}
                   />
 

@@ -4,6 +4,8 @@ import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const ArticleCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -69,7 +71,7 @@ const ArticleCreatePage = () => {
         <div className="w-full max-w-xl">
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-8 rounded-xl shadow-md max-w-xl w-full space-y-4"
+            className="bg-white p-8 rounded-xl shadow-md w-full space-y-4"
           >
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
               <h2 className="text-xl font-semibold text-blue-800">
@@ -86,17 +88,16 @@ const ArticleCreatePage = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="w-full p-2 border rounded"
+              className="w-full p-2 text-gray-600 bg-white border rounded"
             />
-
-            <textarea
-              placeholder="Текст новости"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={8}
-              required
-              className="w-full p-2 border rounded"
-            />
+            <p className="text-gray-500">Введите текст новости</p>
+            <div className="text-black">
+              <CKEditor
+                editor={ClassicEditor}
+                data={content}
+                onChange={(_, editor) => setContent(editor.getData())}
+              />
+            </div>
 
             <div>
               <div className="flex gap-2 mt-2">
@@ -105,7 +106,7 @@ const ArticleCreatePage = () => {
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
                   placeholder="Добавить тег"
-                  className="flex-grow p-2 border rounded"
+                  className="flex-grow p-2 text-gray-600 bg-white border rounded"
                 />
                 <button
                   type="button"
@@ -135,7 +136,7 @@ const ArticleCreatePage = () => {
             </div>
 
             <div>
-              <label className="font-semibold text-gray-500 text-sm">
+              <label className=" text-gray-500 text-sm">
                 Добавьте изображения к статье
               </label>
               <input

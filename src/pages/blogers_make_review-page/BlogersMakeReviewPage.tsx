@@ -123,7 +123,7 @@ export default function BloggerReviewForm() {
                 type="submit"
                 className="bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-900 transition"
               >
-                Опубликовать обзор
+                Отправить
               </button>
             </form>
           </div>

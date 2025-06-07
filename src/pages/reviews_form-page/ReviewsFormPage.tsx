@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "../../widgets/header/Header";
 import { Footer } from "../../widgets/footer/Footer";
+import toast from "react-hot-toast";
 
 interface ReviewFormData {
   stay_month: string;
@@ -72,14 +73,12 @@ const ReviewForm = () => {
       body: JSON.stringify(form),
     });
 
-
-
     if (response.ok) {
-      alert("Отзыв успешно отправлен");
+      toast.success("отзыв отправлен на модерацию");
       navigate(`/resorts/${id}`);
     } else {
       const data = await response.json();
-      alert(`Ошибка: ${data.detail}`);
+      toast.error(data.detail || "Ошибка при публикации отзыва");
     }
   };
 
@@ -141,38 +140,65 @@ const ReviewForm = () => {
             </div>
 
             {[
-              { label: "Катание", key: "skiing", hint: "Расскажите о трассах, их сложности и длине" },
-              { label: "Подъёмники", key: "lifts", hint: "Комфорт и количество подъёмников" },
-              { label: "Цены", key: "prices", hint: "Соотношение цены и качества" },
-              { label: "Снег и погода", key: "snow_weather", hint: "Качество снега и погодные условия" },
-              { label: "Жилье", key: "accommodation", hint: "Уровень проживания и доступность" },
-              { label: "Публика", key: "people", hint: "Аудитория отдыхающих, атмосфера" },
-              { label: "Досуг", key: "apres_ski", hint: "Развлечения после катания" },
+              {
+                label: "Катание",
+                key: "skiing",
+                hint: "Расскажите о трассах, их сложности и длине",
+              },
+              {
+                label: "Подъёмники",
+                key: "lifts",
+                hint: "Комфорт и количество подъёмников",
+              },
+              {
+                label: "Цены",
+                key: "prices",
+                hint: "Соотношение цены и качества",
+              },
+              {
+                label: "Снег и погода",
+                key: "snow_weather",
+                hint: "Качество снега и погодные условия",
+              },
+              {
+                label: "Жилье",
+                key: "accommodation",
+                hint: "Уровень проживания и доступность",
+              },
+              {
+                label: "Публика",
+                key: "people",
+                hint: "Аудитория отдыхающих, атмосфера",
+              },
+              {
+                label: "Досуг",
+                key: "apres_ski",
+                hint: "Развлечения после катания",
+              },
             ].map(({ label, key, hint }) => (
-                <div key={key}>
-                  <label className="font-semibold text-black">{label}</label>
-                  <p className="text-sm text-gray-600 mb-1">{hint}</p>
-                  <textarea
-                      name={`comment_${key}`}
-                      value={(form as any)[`comment_${key}`]}
-                      onChange={handleChange}
-                      className="border p-2 rounded w-full bg-white text-black border-blue-400"
-                  ></textarea>
-                  <select
-                      name={`rating_${key}`}
-                      value={(form as any)[`rating_${key}`]}
-                      onChange={handleChange}
-                      className="border p-2 rounded mt-1 bg-white text-black border-blue-400"
-                  >
-                    {[1, 2, 3, 4, 5].map((r) => (
-                        <option key={r} value={r}>
-                          {r}
-                        </option>
-                    ))}
-                  </select>
-                </div>
+              <div key={key}>
+                <label className="font-semibold text-black">{label}</label>
+                <p className="text-sm text-gray-600 mb-1">{hint}</p>
+                <textarea
+                  name={`comment_${key}`}
+                  value={(form as any)[`comment_${key}`]}
+                  onChange={handleChange}
+                  className="border p-2 rounded w-full bg-white text-black border-blue-400"
+                ></textarea>
+                <select
+                  name={`rating_${key}`}
+                  value={(form as any)[`rating_${key}`]}
+                  onChange={handleChange}
+                  className="border p-2 rounded mt-1 bg-white text-black border-blue-400"
+                >
+                  {[1, 2, 3, 4, 5].map((r) => (
+                    <option key={r} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </div>
             ))}
-
 
             <button
               type="submit"

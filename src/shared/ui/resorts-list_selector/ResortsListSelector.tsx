@@ -101,24 +101,44 @@ const ResortCard = ({
   </div>
 );
 const ResortsSelector = () => {
-  const [searchParams] = useSearchParams();
-  const slopesParam = searchParams.get("slopes");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const updateSearchParams = (keyToRemove: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.delete(keyToRemove);
+    setSearchParams(newParams);
+  };
+
   const [resorts, setResorts] = useState<Resort[]>([]);
-  const [slopesFilter, setSlopesFilter] = useState<string | null>(null);
+  const slopesParam = searchParams.get("slopes");
+  const [slopesFilter, setSlopesFilter] = useState<string | null>(slopesParam);
   const [images, setImages] = useState<Record<number, string>>({});
   const [selectedSort, setSelectedSort] = useState<string>("");
   const [ascending, setAscending] = useState<boolean>(true);
+  const visaParam = searchParams.get("visa");
+
   const [weatherFilters, setWeatherFilters] = useState({
     snow_last_3_days: false,
     snow_expected: false,
   });
 
   useEffect(() => {
+    const snowLast3 = searchParams.get("snow_last_3_days") === "true";
+    const snowExpected = searchParams.get("snow_expected") === "true";
+    const slopes = searchParams.get("slopes");
+    const visa = searchParams.get("visa");
+
+    setWeatherFilters({
+      snow_last_3_days: snowLast3,
+      snow_expected: snowExpected,
+    });
+
+    setSlopesFilter(slopes);
+
     const query = new URLSearchParams();
-    if (weatherFilters.snow_last_3_days)
-      query.append("snow_last_3_days", "true");
-    if (weatherFilters.snow_expected) query.append("snow_expected", "true");
-    if (slopesFilter) query.append("slopes", slopesFilter);
+    if (snowLast3) query.append("snow_last_3_days", "true");
+    if (snowExpected) query.append("snow_expected", "true");
+    if (slopes) query.append("slopes", slopes);
+    if (visa) query.append("visa", visa);
 
     fetch(`/back/api/resorts/selector?${query.toString()}`)
       .then((res) => res.json())
@@ -129,16 +149,15 @@ const ResortsSelector = () => {
             .then((res) => res.json())
             .then((imgs: ResortImage[]) => {
               if (imgs.length > 0) {
-                setImages((prev) => ({ ...prev, [resort.id]: imgs[0].image }));
+                setImages((prev) => ({
+                  ...prev,
+                  [resort.id]: imgs[0].image,
+                }));
               }
             });
         });
       });
-  }, [
-    weatherFilters.snow_last_3_days,
-    weatherFilters.snow_expected,
-    slopesFilter,
-  ]);
+  }, [searchParams]);
 
   const handleSort = (key: string) => {
     if (key === selectedSort) {
@@ -194,6 +213,55 @@ const ResortsSelector = () => {
 
   return (
     <div>
+      <div className="px-10 pt-6">
+        <div className="flex flex-wrap items-center gap-2">
+          {slopesParam && (
+            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+              Трассы: {slopesParam}
+              <button
+                onClick={() => updateSearchParams("slopes")}
+                className="ml-1 text-blue-600 hover:text-red-600 font-bold"
+              >
+                ×
+              </button>
+            </span>
+          )}
+          {visaParam && (
+            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+              Виза: {visaParam === "yes" ? "требуется" : "не требуется"}
+              <button
+                onClick={() => updateSearchParams("visa")}
+                className="ml-1 text-blue-600 hover:text-red-600 font-bold"
+              >
+                ×
+              </button>
+            </span>
+          )}
+          {weatherFilters.snow_last_3_days && (
+            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+              Снег за 3 дня
+              <button
+                onClick={() => updateSearchParams("snow_last_3_days")}
+                className="ml-1 text-blue-600 hover:text-red-600 font-bold"
+              >
+                ×
+              </button>
+            </span>
+          )}
+          {weatherFilters.snow_expected && (
+            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+              Снег ожидается
+              <button
+                onClick={() => updateSearchParams("snow_expected")}
+                className="ml-1 text-blue-600 hover:text-red-600 font-bold"
+              >
+                ×
+              </button>
+            </span>
+          )}
+        </div>
+      </div>
+
       <p className="text-gray-700 text-left p-10 pb-2">
         Найдено {resorts.length} курорт
         {resorts.length === 1
